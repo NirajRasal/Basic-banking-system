@@ -17,9 +17,13 @@
         color: white;
       }
 	
-body{
-		background-color:#ffe6cc;
-		}
+      body{
+		background-color:#e0ebeb;
+        }
+        th{
+	    background-color: #4f4d49;
+        color: white;
+        }
 
     </style>
 </head>

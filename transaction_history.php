@@ -8,20 +8,44 @@
     <link rel="stylesheet" type="text/css" href="css/table.css">
     <link rel="stylesheet" type="text/css" href="css/navbar.css">
 
-<style>
-body{
-		background-color:#ffe6cc;
-		}
-</style>
 </head>
+<style>
+    h5{
+        text-align:center;
+    }
+    th{
+	background-color: #4f4d49;
+    color: white;
+    }
+    </style>
 
-<body>
+<body style = "background-color:#e0ebeb;">
 
 <?php
   include 'navbar.php';
 ?>
+<br>
+<?php
+       include 'db_config.php';
+
+       $sql ="select * from transaction";
+       $sql2 = "select sum(amount) as total from transaction";
+      
+       
+       $total = mysqli_query($conn, $sql);
+       $sum = mysqli_query($conn,$sql2);
 
 
+       $total_rows = mysqli_num_rows($total);
+      
+       $row = mysqli_fetch_assoc($sum); 
+       $final_sum = $row['total'];
+      
+    
+       echo "<pre><h5>Total no of Transactions:$total_rows        Total Amount Transfered:$final_sum</h5></pre>"; 
+
+
+?>
 
 	<div class="container">
         <h2 class="text-center pt-4">Transaction History</h2>
@@ -31,7 +55,7 @@ body{
     <table class="table table-hover table-striped table-condensed table-bordered">
         <thead>
             <tr>
-                <th class="text-center">S.No.</th>
+                <th class="text-center">T.No.</th>
                 <th class="text-center">Sender</th>
                 <th class="text-center">Receiver</th>
                 <th class="text-center">Amount</th>
@@ -41,13 +65,7 @@ body{
         <tbody>
         <?php
 
-            include 'db_config.php';
-
-            $sql ="select * from transaction";
-
-            $query =mysqli_query($conn, $sql);
-
-            while($rows = mysqli_fetch_assoc($query))
+            while($rows = mysqli_fetch_assoc($total))
             {
         ?>
 
@@ -67,7 +85,5 @@ body{
 
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 </body>
 </html>
