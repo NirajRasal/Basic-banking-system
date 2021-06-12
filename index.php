@@ -13,6 +13,9 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/navbar.css">
 
+     <!-- AOS  -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
     <title>Basic Banking System</title>
   </head>
  
@@ -25,9 +28,14 @@
 	text-align: center;
 	background-color :lightgreen;
 }
-
   </style>
-  <body>
+ <body>
+ <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 700,
+    });
+  </script>
   <?php
   include 'navbar.php';
   ?>
@@ -36,18 +44,18 @@
       <!-- Introduction section -->
             <div class="row intro py-1">
               <div class="col-sm-12 col-md">
-                <div class="heading text-center my-5">
+                <div class="heading text-center my-5"data-aos="fade-right">
                   <h3>Welcome to</h3>
                   <h1>SPARKS BANK</h1>
                 </div>
               </div>
-              <div class="col-sm-12 col-md img text-center">              <!--bank image -->
+              <div class="col-sm-12 col-md img text-center" data-aos="fade-left">              <!--bank image -->
                 <img src="img/bank.png" class="img-fluid pt-2">
               </div>
             </div>
 
       <!-- Activity section -->
-            <div class="row activity text-center">
+            <div class="row activity text-center"data-aos="fade-up">
                   <div class="col-md act">
                     <img src="img/transfer.jpg" class="img-fluid">          <!--Transfer money image -->
                     <br>
@@ -67,5 +75,6 @@
 		    <a href="https://www.linkedin.com/in/niraj-rasal/"><i class="fa fa-linkedin-square" style="font-size:36px;color:blue"></i></a>
 		    </p> 
       </footer>
+     
   </body>
 </html>

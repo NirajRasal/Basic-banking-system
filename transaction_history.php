@@ -65,7 +65,7 @@
         <tbody>
         <?php
 
-            while($rows = mysqli_fetch_assoc($total))
+            while($rows = mysqli_fetch_assoc($total))           //display whole transaction table
             {
         ?>
 

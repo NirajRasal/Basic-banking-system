@@ -1,7 +1,7 @@
 <?php
 include 'db_config.php';
 
-if(isset($_POST['submit']))
+if(isset($_POST['submit']))  // isset() method in PHP used to test the form is submitted successfully or not
 {
     $from = $_GET['id'];
     $to = $_POST['to'];
@@ -93,15 +93,14 @@ if(isset($_POST['submit']))
     	
 		button{
 			border:none;
-			background: #d9d9d9;
+			background: #777E8B;
 		}
 	    button:hover{
-			background-color:#777E8B;
 			transform: scale(1.1);
 			color:white;
 		}
 		body{
-         background-color:#ffe6cc;
+         background-color:#e0ebeb;
 		}
 		
 		
@@ -119,7 +118,7 @@ if(isset($_POST['submit']))
             <?php
                 include 'db_config.php';
                 $sid=$_GET['id'];
-                $sql = "SELECT * FROM  users where id=$sid";
+                $sql = "SELECT * FROM  users where id=$sid";          //display the details of selected user
                 $result=mysqli_query($conn,$sql);
                 if(!$result)
                 {
@@ -127,7 +126,7 @@ if(isset($_POST['submit']))
                 }
                 $rows=mysqli_fetch_assoc($result);
             ?>
-            <form method="post" name="tcredit" class="tabletext" ><br>
+            <form method="post" name="tcredit" class="tabletext" ><br>         <!--begining of form code-->
         <div>
             <table class="table table-striped table-condensed table-bordered">
                 <tr>
@@ -173,14 +172,12 @@ if(isset($_POST['submit']))
         <br>
         <br>
             <label>Amount:</label>
-            <input type="number" class="form-control" name="amount" required>   
+            <input type="number" class="form-control" name="amount" min="1" placeholder="Enter amount" required>   
             <br><br>
                 <div class="text-center" >
             <button class="btn mt-3" name="submit" type="submit" id="myBtn">Transfer</button>
             </div>
         </form>
     </div>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 </body>
 </html>
