@@ -200,7 +200,7 @@ if(isset($_POST['submit']))  // isset() method in PHP used to test the form is s
                         text: 'Transaction completed successfully',
                         type: 'success'
                     }).then(function() {
-                        window.location = 'transaction_history.php';
+                        window.location = 'transfer_money.php';
                     });
                      
                            </script>";
