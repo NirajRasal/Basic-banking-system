@@ -1,5 +1,114 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/table.css">
+    <link rel="stylesheet" type="text/css" href="css/navbar.css">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>     <!--for alert box -->
+
+    <style type="text/css">
+    button {
+        border: none;
+        background: #777E8B;
+    }
+
+    button:hover {
+        transform: scale(1.1);
+        color: white;
+    }
+
+    body {
+        background-color: #e0ebeb;
+    }
+    </style>
+</head>
+
+<body>
+
+    <?php
+  include 'navbar.php';
+?>
+
+
+    <div class="container">
+        <h2 class="text-center pt-4">Transaction</h2>
+        <?php
+                include 'db_config.php';
+                $sid=$_GET['id'];
+                $sql = "SELECT * FROM  users where id=$sid";          //display the details of selected user
+                $result=mysqli_query($conn,$sql);
+                if(!$result)
+                {
+                    echo "Error : ".$sql."<br>".mysqli_error($conn);
+                }
+                $rows=mysqli_fetch_assoc($result);
+            ?>
+        <form method="post" name="tcredit" class="tabletext"><br>        <!--begining of form code-->
+            <div>
+                <table class="table table-striped table-condensed table-bordered">
+                    <tr>
+                        <th class="text-center">Id</th>
+                        <th class="text-center">Name</th>
+                        <th class="text-center">Email</th>
+                        <th class="text-center">Balance</th>
+                    </tr>
+                    <tr>
+                        <td class="py-2"><?php echo $rows['id'] ?></td>
+                        <td class="py-2"><?php echo $rows['name'] ?></td>
+                        <td class="py-2"><?php echo $rows['email'] ?></td>
+                        <td class="py-2"><?php echo $rows['balance'] ?></td>
+                    </tr>
+                </table>
+            </div>
+            <br><br><br>
+            <label>Transfer To:</label>
+            <select name="to" class="form-control" required>
+                <option value="" disabled selected>Choose</option>
+                <?php
+                include 'db_config.php';
+                $sid=$_GET['id'];
+                $sql = "SELECT * FROM users where id!=$sid";          //display the details of account except sender's accuont
+                $result=mysqli_query($conn,$sql);
+                if(!$result)
+                {
+                    echo "Error ".$sql."<br>".mysqli_error($conn);
+                }
+                while($rows = mysqli_fetch_assoc($result)) {
+            ?>
+                <option class="table" value="<?php echo $rows['id'];?>">
+
+                    <?php echo $rows['name'] ;?> (Balance:
+                    <?php echo $rows['balance'] ;?> )
+
+                </option>
+                <?php 
+                } 
+            ?>
+                <div>
+            </select>
+            <br>
+            <br>
+            <label>Amount:</label>
+            <input type="number" class="form-control" name="amount" min=1 placeholder="Enter amount" required>
+            <br>
+            <div class="text-center">
+                <button class="btn mt-3" name="submit" type="submit" id="myBtn">Transfer</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
+
 <?php
-include 'db_config.php';
+include 'db_config.php'; 
 
 if(isset($_POST['submit']))  // isset() method in PHP used to test the form is submitted successfully or not
 {
@@ -17,45 +126,64 @@ if(isset($_POST['submit']))  // isset() method in PHP used to test the form is s
 
 
 
-    // constraint to check input of negative value by user
+                                                        // constraint to check input of negative value by user
     if (($amount)<0)
    {
-        echo '<script type="text/javascript">';
-        echo ' alert("Oops! Negative values cannot be transferred")';  // showing an alert box.
-        echo '</script>';
+    echo "<script> 
+    swal({
+      title: 'OOPS!!',
+      text: 'Negative Values are not allowed',
+      type: 'error'
+  }).then(function() {
+      window.location = 'transfer_money.php';
+  });
+         </script>";
     }
 
 
   
-    // constraint to check insufficient balance.
+                                                        // constraint to check insufficient balance.
     else if($amount > $sql1['balance']) 
     {
         
-        echo '<script type="text/javascript">';
-        echo ' alert("Bad Luck! Insufficient Balance")';  // showing an alert box.
-        echo '</script>';
+        echo "<script> 
+        swal({
+          title: 'OOPS!!',
+          text: 'Insufficient balance in account',
+          type: 'error'
+      }).then(function() {
+          window.location = 'transfer_money.php';
+      });
+             </script>";    
     }
     
 
 
-    // constraint to check zero values
+                                                        // constraint to check zero values
     else if($amount == 0){
 
-         echo "<script type='text/javascript'>";
-         echo "alert('Oops! Zero value cannot be transferred')";
-         echo "</script>";
+
+        echo "<script> 
+        swal({
+          title: 'OOPS!!',
+          text: 'Zero Value cannot be transfered',
+          type: 'error'
+      }).then(function() {
+          window.location = 'transfer_money.php';
+      });
+             </script>";
      }
 
 
     else {
         
-                // deducting amount from sender's account
+                                                                        // deducting amount from sender's account
                 $newbalance = $sql1['balance'] - $amount;
                 $sql = "UPDATE users set balance=$newbalance where id=$from";
                 mysqli_query($conn,$sql);
              
 
-                // adding amount to reciever's account
+                                                                        // adding amount to reciever's account
                 $newbalance = $sql2['balance'] + $amount;
                 $sql = "UPDATE users set balance=$newbalance where id=$to";
                 mysqli_query($conn,$sql);
@@ -66,8 +194,15 @@ if(isset($_POST['submit']))  // isset() method in PHP used to test the form is s
                 $query=mysqli_query($conn,$sql);
 
                 if($query){
-                     echo "<script> alert('Transaction Successful');
-                                     window.location='transaction_history.php';
+                     echo "<script> 
+                      swal({
+                        title: 'Good job!',
+                        text: 'Transaction completed successfully',
+                        type: 'success'
+                    }).then(function() {
+                        window.location = 'transaction_history.php';
+                    });
+                     
                            </script>";
                     
                 }
@@ -78,106 +213,3 @@ if(isset($_POST['submit']))  // isset() method in PHP used to test the form is s
     
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transaction</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="css/table.css">
-    <link rel="stylesheet" type="text/css" href="css/navbar.css">
-
-    <style type="text/css">
-    	
-		button{
-			border:none;
-			background: #777E8B;
-		}
-	    button:hover{
-			transform: scale(1.1);
-			color:white;
-		}
-		body{
-         background-color:#e0ebeb;
-		}
-		
-		
-    </style>
-</head>
-
-<body>
- 
-<?php
-  include 'navbar.php';
-?>
-
-	<div class="container">
-        <h2 class="text-center pt-4">Transaction</h2>
-            <?php
-                include 'db_config.php';
-                $sid=$_GET['id'];
-                $sql = "SELECT * FROM  users where id=$sid";          //display the details of selected user
-                $result=mysqli_query($conn,$sql);
-                if(!$result)
-                {
-                    echo "Error : ".$sql."<br>".mysqli_error($conn);
-                }
-                $rows=mysqli_fetch_assoc($result);
-            ?>
-            <form method="post" name="tcredit" class="tabletext" ><br>         <!--begining of form code-->
-        <div>
-            <table class="table table-striped table-condensed table-bordered">
-                <tr>
-                    <th class="text-center">Id</th>
-                    <th class="text-center">Name</th>
-                    <th class="text-center">Email</th>
-                    <th class="text-center">Balance</th>
-                </tr>
-                <tr>
-                    <td class="py-2"><?php echo $rows['id'] ?></td>
-                    <td class="py-2"><?php echo $rows['name'] ?></td>
-                    <td class="py-2"><?php echo $rows['email'] ?></td>
-                    <td class="py-2"><?php echo $rows['balance'] ?></td>
-                </tr>
-            </table>
-        </div>
-        <br><br><br>
-        <label>Transfer To:</label>
-        <select name="to" class="form-control" required>
-            <option value="" disabled selected>Choose</option>
-            <?php
-                include 'db_config.php';
-                $sid=$_GET['id'];
-                $sql = "SELECT * FROM users where id!=$sid";
-                $result=mysqli_query($conn,$sql);
-                if(!$result)
-                {
-                    echo "Error ".$sql."<br>".mysqli_error($conn);
-                }
-                while($rows = mysqli_fetch_assoc($result)) {
-            ?>
-                <option class="table" value="<?php echo $rows['id'];?>" >
-                
-                    <?php echo $rows['name'] ;?> (Balance: 
-                    <?php echo $rows['balance'] ;?> ) 
-               
-                </option>
-            <?php 
-                } 
-            ?>
-            <div>
-        </select>
-        <br>
-        <br>
-            <label>Amount:</label>
-            <input type="number" class="form-control" name="amount" min="1" placeholder="Enter amount" required>   
-            <br><br>
-                <div class="text-center" >
-            <button class="btn mt-3" name="submit" type="submit" id="myBtn">Transfer</button>
-            </div>
-        </form>
-    </div>
-</body>
-</html>
