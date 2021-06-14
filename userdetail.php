@@ -110,7 +110,7 @@
 <?php
 include 'db_config.php'; 
 
-if(isset($_POST['submit']))  // isset() method in PHP used to test the form is submitted successfully or not
+if(isset($_POST['submit']))              // isset() method in PHP used to test the form is submitted successfully or not
 {
     $from = $_GET['id'];
     $to = $_POST['to'];
@@ -118,7 +118,7 @@ if(isset($_POST['submit']))  // isset() method in PHP used to test the form is s
 
     $sql = "SELECT * from users where id=$from";
     $query = mysqli_query($conn,$sql);
-    $sql1 = mysqli_fetch_array($query); // returns array or output of user from which the amount is to be transferred.
+    $sql1 = mysqli_fetch_array($query);     // returns array or output of user from which the amount is to be transferred.
 
     $sql = "SELECT * from users where id=$to";
     $query = mysqli_query($conn,$sql);
