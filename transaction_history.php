@@ -31,21 +31,23 @@ th {
     <?php
        include 'db_config.php';
 
-       $sql ="select * from transaction";
-       $sql2 = "select sum(amount) as total from transaction";
-      
+       $sql ="select avg(amount) as avg_total from transaction";
+       $sql1 = "select sum(amount) as sum_total from transaction";
+       $sql2  = "select *from transaction";
        
-       $total = mysqli_query($conn, $sql);
-       $sum = mysqli_query($conn,$sql2);
+       $total_avg = mysqli_query($conn, $sql);              //execute query
+       $sum = mysqli_query($conn,$sql1);
+       $total = mysqli_query($conn,$sql2);
 
 
-       $total_rows = mysqli_num_rows($total);
+       $row = mysqli_fetch_assoc($total_avg);               //fetch results
+       $final_avg = $row['avg_total'];
       
-       $row = mysqli_fetch_assoc($sum); 
-       $final_sum = $row['total'];
+       $row = mysqli_fetch_assoc($sum);                     //fetch results
+       $final_sum = $row['sum_total'];
       
     
-       echo "<pre><h5>Total no of Transactions:$total_rows        Total Amount Transfered:$final_sum</h5></pre>"; 
+       echo "<pre><h5>Total Amount Transfered:$final_sum            Avarage Transaction value:$final_avg</h5></pre>"; 
 
 
 ?>
